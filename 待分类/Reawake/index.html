@@ -3,7 +3,7 @@
 <html lang="zh">
 <head>
     <meta charset="utf-8" />
-    <title>Amadeus</title>
+    <title>用hexo搭建博客的记录 | Amadeus</title>
     <meta name="author" content="Amadeus" />
     <meta name="description" content="欢迎游客朋友，blog目前还在建设中，敬请期待~" />
     <meta name="keywords" content="automobile" />
@@ -42,7 +42,9 @@
 
 
 
-<script src="/js/lib/home.js"></script>
+
+
+
 
 <link rel="stylesheet" href="/css/main.css" />
 
@@ -152,39 +154,17 @@
 </transition>
 
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
-            <div id="home-head">
-    <div
-        id="home-background"
-        ref="homeBackground"
-        data-images="/images/background.jpg"
-    ></div>
-    <div id="home-info" @click="homeClick">
-        <span class="loop"></span>
-        <span class="loop"></span>
-        <span class="loop"></span>
-        <span class="loop"></span>
-        <span class="info">
-            <div class="wrap">
-                <h1>Amadeus</h1>
-                <h3>Enhance Armament!</h3>
-                <h5>欢迎游客朋友，blog目前还在建设中，敬请期待~</h5>
-            </div>
-        </span>
+            <div class="article">
+    <div>
+        <h1>用hexo搭建博客的记录</h1>
     </div>
-</div>
-<div
-    id="home-posts-wrap"
-    ref="homePostsWrap"
-    true
->
-    <div id="home-posts">
-        
-
-<div class="post">
-    <a href="/%E5%BE%85%E5%88%86%E7%B1%BB/Reawake/">
-        <h2 class="post-title">用hexo搭建博客的记录</h2>
-    </a>
-    <div class="category-and-date">
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/7/20
+        </span>
         
         <span class="category">
             <a href="/categories/%E5%BE%85%E5%88%86%E7%B1%BB/">
@@ -195,19 +175,26 @@
             </a>
         </span>
         
-        <span class="date">
+        
+        <span class="tags">
             <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
+                <i class="fa-solid fa-tags fa-fw"></i>
             </span>
-            2024/7/20
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/%E7%AC%AC%E4%B8%80%E7%AF%87/" style="color: #00bcd4">
+                    第一篇
+                </a>
+            </span>
+            
         </span>
         
-        
     </div>
-    <div class="description">
-        <div class="content" v-pre>
-            
-            <p>近段时间有空，刚好把以前做了一半的博客重新装修一下。在22年我研究了如何在github上面整一个自己的博客，但由于当时太忙，还没把博客的环境完善好就跑路了。因此，我把这个blog装修计划命名为Reawake！希望能重新把博客建好，建设知识分享库。</p>
+    
+    <div class="content" v-pre>
+        <p>近段时间有空，刚好把以前做了一半的博客重新装修一下。在22年我研究了如何在github上面整一个自己的博客，但由于当时太忙，还没把博客的环境完善好就跑路了。因此，我把这个blog装修计划命名为Reawake！希望能重新把博客建好，建设知识分享库。</p>
 <p>之前用hexo框架搭了个半成品，那就继续照着框架重新配置一遍，先把配置过程记录一下，以备下次查阅用。</p>
 <h2 id="一、配置本地环境"><a href="#一、配置本地环境" class="headerlink" title="一、配置本地环境"></a>一、配置本地环境</h2><p>配环境当然是第一步，首先应当在本地装一个git，用<code>git --version</code>命令可验证是否安装成功。</p>
 <p>接下来是nodejs，用<code>node -v</code>命令验证是否安装成功。</p>
@@ -263,112 +250,26 @@ hexo version  #查看Hexo的版本
 <p>新建一篇名为：Reawake的博客 </p>
 <p>命令：<code>hexo new &#39;Reawake&#39;</code></p>
 <p>通过这个命令，会在source -&gt; _posts下生成对应的<code>Reawake.md</code>文件，在md文件中编辑内容即可。</p>
-<p>在md中，可以用
-            
-        </div>
-    </div>
-    <div class="post-tags">
-        
-        <span class="icon">
-            <i class="fa-solid fa-tags fa-fw"></i>
-        </span>
-        
-        
-        
-        <span class="tag">
-            
-            <a href="/tags/%E7%AC%AC%E4%B8%80%E7%AF%87/" style="color: #ff7d73">第一篇</a>
-        </span>
-        
-    </div>
-    <a href="/%E5%BE%85%E5%88%86%E7%B1%BB/Reawake/" class="go-post">阅读全文</a>
-</div>
+<p>在md中，可以用<span id="more"></span>来实现预览的效果，作用是在查看文章的时候，点击more的时候再加载全部的文章内容。</p>
+<p>写完博客文章后，用<code>hexo g</code>和<code>hexo d</code>即可生成网页后，将其推送到github更新了。</p>
+<h2 id="参考链接："><a href="#参考链接：" class="headerlink" title="参考链接："></a>参考链接：</h2><p>1、利用Github搭建自己的个人博客，看完就会的保姆级教程</p>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2280881">https://cloud.tencent.com/developer/article/2280881</a></p>
+<p>2、Hexo博客彻底删除文章教程</p>
+<p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2140491">https://cloud.tencent.com/developer/article/2140491</a></p>
+<p>3、hexo官方配置文档</p>
+<p><a target="_blank" rel="noopener" href="https://hexo.io/docs/configuration.html">https://hexo.io/docs/configuration.html</a></p>
+<p>4、Hexo添加分类和标签</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/cflsup/article/details/123452683">https://blog.csdn.net/cflsup/article/details/123452683</a></p>
+<p>5、hexo主题-ParticleX</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">https://github.com/theme-particlex/hexo-theme-particlex</a></p>
 
-<div class="post">
-    <a href="/%E5%BE%85%E5%88%86%E7%B1%BB/hello-world/">
-        <h2 class="post-title">Hello World</h2>
-    </a>
-    <div class="category-and-date">
-        
-        <span class="category">
-            <a href="/categories/%E5%BE%85%E5%88%86%E7%B1%BB/">
-                <span class="icon">
-                    <i class="fa-solid fa-bookmark fa-fw"></i>
-                </span>
-                待分类
-            </a>
-        </span>
-        
-        <span class="date">
-            <span class="icon">
-                <i class="fa-solid fa-calendar fa-fw"></i>
-            </span>
-            2022/11/5
-        </span>
-        
-        
     </div>
-    <div class="description">
-        <div class="content" v-pre>
-            
-            <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-            
-        </div>
-    </div>
-    <div class="post-tags">
-        
-        <span class="icon">
-            <i class="fa-solid fa-tags fa-fw"></i>
-        </span>
-        
-        
-        
-        <span class="tag">
-            
-            <a href="/tags/%E7%AC%AC%E4%B8%80%E7%AF%87/" style="color: #ffa2c4">第一篇</a>
-        </span>
-        
-    </div>
-    <a href="/%E5%BE%85%E5%88%86%E7%B1%BB/hello-world/" class="go-post">阅读全文</a>
-</div>
-
-
-        <div class="page-current">
     
-    <span class="current">1</span>
     
     
     
     
-</div>
-
-    </div>
     
-    <div id="home-card">
-        <div id="card-style">
-    <div id="card-div">
-        <div class="avatar">
-            <img src="/images/avatar.jpg" alt="avatar" />
-        </div>
-        <div class="name">Amadeus</div>
-        <div class="description">
-            <p>BinX战队<br>S1uM4i战队<br>SAINTSEC战队<br>四期之光<br>摸索学习车联网安全的小白<br>欢迎各位一同交流~~</p>
-
-        </div>
-        
-        
-        <div class="friend-links">
-            
-            <div class="friend-link">
-                <a target="_blank" rel="noopener" href="https://github.com/yong60">github</a>
-            </div>
-            
-        </div>
-        
-    </div>
-</div>
-
-    </div>
     
 </div>
 
@@ -400,6 +301,12 @@ hexo version  #查看Hexo的版本
         
     </div>
     <script src="/js/main.js"></script>
+    
+    
+
+
+
+
     
 </body>
 </html>
