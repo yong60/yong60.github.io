@@ -1,0 +1,290 @@
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="utf-8" />
+    <title>RFID卡片破解 | Amadeus</title>
+    <meta name="author" content="Amadeus" />
+    <meta name="description" content="欢迎游客朋友，blog目前还在建设中，敬请期待~" />
+    <meta name="keywords" content="automobile" />
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <link rel="icon" href="/images/avatar.jpg" />
+    <link rel="preconnect" href="https://s4.zstatic.net" />
+<script src="https://s4.zstatic.net/ajax/libs/vue/3.3.7/vue.global.prod.min.js"></script>
+<link rel="stylesheet" href="https://s4.zstatic.net/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.cn" />
+<link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin />
+<link
+    rel="stylesheet"
+    href="https://fonts.googleapis.cn/css2?family=Fira+Code:wght@400;500;600;700&family=Lexend:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;600;700;800;900&display=swap"
+/>
+<script> const mixins = {}; </script>
+
+<script src="https://polyfill.alicdn.com/v3/polyfill.min.js?features=default"></script>
+
+
+<script src="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://s4.zstatic.net/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"></script>
+<link
+    rel="stylesheet"
+    href="https://s4.zstatic.net/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+/>
+<script src="/js/lib/highlight.js"></script>
+
+
+
+<script src="/js/lib/preview.js"></script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/css/main.css" />
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body>
+    <div id="layout">
+        <transition name="fade">
+            <div id="loading" v-show="loading">
+                <div id="loading-circle">
+                    <h2>LOADING</h2>
+                    <p>加载过慢请开启缓存 浏览器默认开启</p>
+                    <img src="/images/loading.gif" />
+                </div>
+            </div>
+        </transition>
+        <div id="menu" :class="{ hidden: hiddenMenu, 'menu-color': menuColor}">
+    <nav id="desktop-menu">
+        <a class="title" href="/">
+            <span>AMADEUS</span>
+        </a>
+        
+        <a href="/">
+            <i class="fa-solid fa-house fa-fw"></i>
+            <span>&ensp;主页</span>
+        </a>
+        
+        <a href="/about">
+            <i class="fa-solid fa-id-card fa-fw"></i>
+            <span>&ensp;关于</span>
+        </a>
+        
+        <a href="/archives">
+            <i class="fa-solid fa-box-archive fa-fw"></i>
+            <span>&ensp;文章</span>
+        </a>
+        
+        <a href="/categories">
+            <i class="fa-solid fa-bookmark fa-fw"></i>
+            <span>&ensp;分类</span>
+        </a>
+        
+        <a href="/tags">
+            <i class="fa-solid fa-tags fa-fw"></i>
+            <span>&ensp;标签</span>
+        </a>
+        
+    </nav>
+    <nav id="mobile-menu">
+        <div class="title" @click="showMenuItems = !showMenuItems">
+            <i class="fa-solid fa-bars fa-fw"></i>
+            <span>&emsp;AMADEUS</span>
+        </div>
+        <transition name="slide">
+            <div class="items" v-show="showMenuItems">
+                
+                <a href="/">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-house fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">主页</div>
+                    </div>
+                </a>
+                
+                <a href="/about">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-id-card fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">关于</div>
+                    </div>
+                </a>
+                
+                <a href="/archives">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-box-archive fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">文章</div>
+                    </div>
+                </a>
+                
+                <a href="/categories">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-bookmark fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">分类</div>
+                    </div>
+                </a>
+                
+                <a href="/tags">
+                    <div class="item">
+                        <div style="min-width: 20px; max-width: 50px; width: 10%">
+                            <i class="fa-solid fa-tags fa-fw"></i>
+                        </div>
+                        <div style="min-width: 100px; max-width: 150%; width: 20%">标签</div>
+                    </div>
+                </a>
+                
+            </div>
+        </transition>
+    </nav>
+</div>
+<transition name="fade">
+    <div id="menu-curtain" @click="showMenuItems = !showMenuItems" v-show="showMenuItems"></div>
+</transition>
+
+        <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
+            <div class="article">
+    <div>
+        <h1>RFID卡片破解</h1>
+    </div>
+    <div class="info">
+        <span class="date">
+            <span class="icon">
+                <i class="fa-solid fa-calendar fa-fw"></i>
+            </span>
+            2024/8/8
+        </span>
+        
+        <span class="category">
+            <a href="/categories/IoT/">
+                <span class="icon">
+                    <i class="fa-solid fa-bookmark fa-fw"></i>
+                </span>
+                IoT
+            </a>
+        </span>
+        
+        
+        <span class="tags">
+            <span class="icon">
+                <i class="fa-solid fa-tags fa-fw"></i>
+            </span>
+            
+            
+            <span class="tag">
+                
+                <a href="/tags/RFID/" style="color: #00a596">
+                    RFID
+                </a>
+            </span>
+            
+            <span class="tag">
+                
+                <a href="/tags/%E6%97%A0%E7%BA%BF%E7%94%B5/" style="color: #ff7d73">
+                    无线电
+                </a>
+            </span>
+            
+        </span>
+        
+    </div>
+    
+    <div class="content" v-pre>
+        <p>关于卡片破解的事情，我在先前有过一段时间的研究，但之前没有做过系统的总结，也没有对破解过程做过记录。最近刚好有这方面需求，所以想着重新捡起来一下，对这方面做一份总结。</p>
+<span id="more"></span>
+
+<p>市面上常用的RFID卡片可以分为以下几种类型。</p>
+<h1 id="一、ISO-14443-Type-A标准高频卡片"><a href="#一、ISO-14443-Type-A标准高频卡片" class="headerlink" title="一、ISO 14443 -Type A标准高频卡片"></a>一、ISO 14443 -Type A标准高频卡片</h1><h2 id="1、Mifare-S50-（M1）"><a href="#1、Mifare-S50-（M1）" class="headerlink" title="1、Mifare S50 （M1）"></a><strong>1、Mifare S50 （M1）</strong></h2><p>M1卡的使用频率为13.56Mhz，这是目前最常用的高频卡，属于IC卡的一种。它的每张卡有独一无二的UID号，可存储或者修改数据，类似卡片有（学生卡。饭卡，公交卡，门禁卡）</p>
+<p>M1卡的结构和存储数据可以参考下图。M1卡储存的数据大小为8k，分为16个扇区，每个扇区分4个块，每个块为16个字节，以块为存取单位。<strong>每个扇区都有独立的一组密码及访问控制</strong>，每张卡有唯一的一个32位的序列号。每个扇区的0,1,2块为数据块，用来存储数据，第3块为控制块，包括了密钥A、存取控制、密钥B，每张卡的第0扇区的第0块用来存储厂商代码，不可更改。</p>
+<p><img src="https://zwtdi650f1m.feishu.cn/space/api/box/stream/download/asynccode/?code=MWU2ZjAyOWYwMzU1YTcwOWFiMzdlZmFhY2JlMGNlNWVfbmlnU3pWNEJ2MGNoeUVwZktWRDFKWklUV3hmbk1qRmxfVG9rZW46WTFwc2JueUJsb2Z0aTB4MEQxM2NmS0RMbmlkXzE3MjMwNTYwOTE6MTcyMzA1OTY5MV9WNA" alt="img"></p>
+<p>按照图中，校验位的计算方法如下。</p>
+<p>前 4 个字节为 UID 卡号，第 5 个字节为校验字节，<strong>校验字节 &#x3D; 前 4 个字节单独连续<strong><strong>异或</strong></strong>。</strong></p>
+<p>比如 DD ^ DC ^ 8B ^ C9 &#x3D; 43。</p>
+<p>中间4字节控制字是管理密码权限，用来设置A密码和B密码的功能。默认不修改的时候，可以用A密码读写所有数据。A密码不可读出，B密码可以用A密码读出。<strong>密码不一定可以读取，由控制字决定。</strong></p>
+<p>这个卡又分 非加密卡 、半加密卡 和 全加密卡。</p>
+<p><strong>非加密卡中所有<strong><strong>扇区</strong></strong>的KEYA和KEYB数值都是默认值FFFFFFFFFFFF。</strong></p>
+<p>而加密卡中，其中有扇区的KEYA和KEYB不等于FFFFFFFFFFFF，部分扇区加密的卡称半加密卡，所有扇区都加密的卡称全加密卡。</p>
+<h2 id="2、Mifare-UID（UID）"><a href="#2、Mifare-UID（UID）" class="headerlink" title="2、Mifare UID（UID）"></a>2、Mifare UID（UID）</h2><p>UID卡是属于M1卡的变异版本，可修改UID卡，俗称的魔术卡，可以克隆完整的 M1 S50 的数据。它实际上用起来和M1 S50完全一样，只是多了一个功能，就是<strong>0扇区块的数据可以随意修改</strong>。因此UID号也可以随意修改，厂家信息也可以随意修改。UID卡修改0扇区0块数据是靠指令进入工厂模式，可以直接对全卡任何数据编辑，<strong>不需要密码即可读写卡</strong>，同时不怕写坏卡，即使写错0块，写坏扇区控制字，也可以随时修复回来，不影响后续使用。</p>
+<h2 id="3、CUID"><a href="#3、CUID" class="headerlink" title="3、CUID"></a>3、CUID</h2><p>CUID卡是针对UID卡做的优化。CUID卡可以<strong>重复修改0块</strong>，但是它和UID卡的区别是，UID卡是通过指令修改0块，CUID使用的是<strong>常规密码验证的方法写0块</strong>（写错了之后重写需要清卡），其他扇区和标准M1卡相同。但<strong>如果写错了UID号的<strong><strong>校验位</strong></strong>会导致无法读卡</strong>，这会使卡报废。</p>
+<h2 id="4、FUID"><a href="#4、FUID" class="headerlink" title="4、FUID"></a>4、FUID</h2><p>FUID卡是针对UID卡做的优化。新的读卡系统，通过检测卡片对特殊指令的回应，可以检测出UID卡，因此可以来拒绝UID卡的访问，来达到屏蔽复制卡的功能。<strong>FUID可以修改0块，但只可以修改一次</strong>，写错也没办法更改，也不能重复利用。修改后和M1卡完全一样，很难被屏蔽检测。</p>
+<h2 id="5、CFUID"><a href="#5、CFUID" class="headerlink" title="5、CFUID"></a>5、CFUID</h2><p>鉴于FUID卡写错的成本太高，又发展出了这种卡。 CFUID卡 0扇区固化前可随意修改（相当于UID卡），固化（锁卡）后就跟M1卡完全一样。</p>
+<h1 id="二、ISO-14443-Type-B标准高频卡片"><a href="#二、ISO-14443-Type-B标准高频卡片" class="headerlink" title="二、ISO 14443 -Type B标准高频卡片"></a>二、ISO 14443 -Type B标准高频卡片</h1><p>跟ISO 14443 -Type A 标准 的不同主要在于载波的调制深度及位的编码方式。TYPE A采用开关键控(On-Off keying)的Manchester编码，TYPE B采用NRZ-L的BPSK编码。</p>
+<p>TYPE B与TYPE A相比，具有<strong>传输能量不中断、速率更高、抗干扰能力强</strong>的优点。RFID的核心是防冲突技术，这也是和接触式IC卡的主要区别。ISO14443-3规定了TYPEA和TYPE B的防冲突机制。二者防冲突机制的原理不同，前者是基于位冲突检测协议，而TYPE B通信系列命令序列完成防冲突。</p>
+<p>目前的<strong>二代身份证，社保卡，护照</strong>都是基于此标准，研究这个标准最初是为了能读出身份证信息或者护照。</p>
+<h1 id="三、低频卡"><a href="#三、低频卡" class="headerlink" title="三、低频卡"></a>三、低频卡</h1><h2 id="1、ID卡"><a href="#1、ID卡" class="headerlink" title="1、ID卡"></a>1、ID卡</h2><p>说到低频卡，最广泛使用的便是ID卡了。这种卡片的频率一般在125khz左右，特点是只能读不能写。一般是以EM4XX开头的，而<strong>EM4095芯片就是专门用来读取ID卡的功能模块</strong>。</p>
+<p>现在广泛采用的多是一种无源、唯一序列号的 ID 卡片，制造厂家在产品出厂前已将此序列号固化，不可更改。它的工作原理是卡上有环行线圈，线圈连接IC组成谐振电路，其频率与读写的发射频率相同。读写器发送电磁波使ID卡谐振电路产生共振并产生电流作用于 ID 芯片，这就是 ID 卡的读写原理。国内目前所说的 ID 卡俗称通常指与 EM4100 完全兼容的ID低频芯片卡，也有人称为 EM 卡。</p>
+<p>ID 卡多使用在公司，小区安防等，针对具体应用，可将持卡人的个人资料送入后台计算机，建立数据库并配置应用软件，使用时通过读卡器将读到的卡号送至后台计算机，从数据库中调出持卡人的个人资料，而后根据具体进行操作。</p>
+<p>由于ID 卡的构造简单，<strong>根据设备的频段读取设备信息，然后根据读取的信息，重新写入到新卡中</strong>，ID 卡因为没有存储和加密的功能，所以读出的只是一串号码，把号码重新写入到新卡就可以完成复制了。</p>
+<h2 id="2、T5577（可修改ID卡）"><a href="#2、T5577（可修改ID卡）" class="headerlink" title="2、T5577（可修改ID卡）"></a>2、T5577（可修改ID卡）</h2><p>这种类型的卡片，特点是可以用来克隆ID卡，出厂设置就是空卡。直接往里面写数据即可完成卡片克隆，所以没有太多可展开的内容。</p>
+<h1 id="四、破解思路"><a href="#四、破解思路" class="headerlink" title="四、破解思路"></a>四、破解思路</h1><p>当然，想要破解RFID卡片，首要的便是分清楚卡的类型是什么，我们主要可以将卡的类型分为IC卡和ID卡两种类型。</p>
+<p><strong>ID卡的攻击思路如下：</strong></p>
+<pre><code>读卡片ID→换白卡→写入ID卡号→克隆完成→攻击成功
+</code></pre>
+<p>非常简单，因为ID卡总体上不涉及过多加密过程。</p>
+<p><strong>IC卡****的总体思路如下：</strong> 漏洞测试→获取全卡数据→换上UID卡→写入数据→攻击成功 如果执行数据修改，思路如下： 漏洞测试→读全卡数据→解密卡片数据→破解厂商算法→修改数据→攻击成功。</p>
+<p><strong>IC卡****攻击思路如下：</strong> 1.获得任意扇区的密码 1.1 PRNG漏洞攻击得到0扇区的密码 1.2 默认密码扫描获得密码 1.3 嗅探读卡机和卡片交互的时候获得密码，这种方式需要现场进行交互，不太方便。</p>
+<p>2.利用 MFOC漏洞，可以暴力破解得到所有扇区的密匙。</p>
+<p>以上这些思路，利用proxmark3工具即可完成。</p>
+<p>后续待补充实际攻击案例。</p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><p>1、<a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1490410">https://cloud.tencent.com/developer/article/1490410</a></p>
+<p>2、<a target="_blank" rel="noopener" href="https://bbs.kanxue.com/thread-225059.htm">https://bbs.kanxue.com/thread-225059.htm</a></p>
+<p>3、<a target="_blank" rel="noopener" href="https://blog.51cto.com/xiaoyaoyou10/5856746">https://blog.51cto.com/xiaoyaoyou10/5856746</a></p>
+
+    </div>
+    
+    
+    
+    
+    
+    
+    
+</div>
+
+            <footer id="footer">
+    <div id="footer-wrap">
+        <div>
+            &copy;
+            2022 - 2024 Amadeus
+            <span id="footer-icon">
+                <i class="fa-solid fa-font-awesome fa-fw"></i>
+            </span>
+            &commat;Amadeus
+        </div>
+        <div>
+            Based on the <a target="_blank" rel="noopener" href="https://hexo.io">Hexo Engine</a> &amp;
+            <a target="_blank" rel="noopener" href="https://github.com/theme-particlex/hexo-theme-particlex">ParticleX Theme</a>
+        </div>
+        
+    </div>
+</footer>
+
+        </div>
+        
+        <transition name="fade">
+            <div id="preview" ref="preview" v-show="previewShow">
+                <img id="preview-content" ref="previewContent" />
+            </div>
+        </transition>
+        
+    </div>
+    <script src="/js/main.js"></script>
+    
+    
+
+
+
+
+    
+</body>
+</html>
