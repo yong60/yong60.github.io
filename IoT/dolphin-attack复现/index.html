@@ -3,7 +3,7 @@
 <html lang="zh">
 <head>
     <meta charset="utf-8" />
-    <title>Hello World | Amadeus</title>
+    <title>dolphin attack复现 | Amadeus</title>
     <meta name="author" content="Amadeus" />
     <meta name="description" content="欢迎游客朋友，blog目前还在建设中，敬请期待~" />
     <meta name="keywords" content="automobile" />
@@ -156,22 +156,22 @@
         <div id="main" :class="loading ? 'into-enter-from': 'into-enter-active'">
             <div class="article">
     <div>
-        <h1>Hello World</h1>
+        <h1>dolphin attack复现</h1>
     </div>
     <div class="info">
         <span class="date">
             <span class="icon">
                 <i class="fa-solid fa-calendar fa-fw"></i>
             </span>
-            2022/11/5
+            2025/12/10
         </span>
         
         <span class="category">
-            <a href="/categories/%E5%BE%85%E5%88%86%E7%B1%BB/">
+            <a href="/categories/IoT/">
                 <span class="icon">
                     <i class="fa-solid fa-bookmark fa-fw"></i>
                 </span>
-                待分类
+                IoT
             </a>
         </span>
         
@@ -184,8 +184,8 @@
             
             <span class="tag">
                 
-                <a href="/tags/%E7%AC%AC%E4%B8%80%E7%AF%87/" style="color: #03a9f4">
-                    第一篇
+                <a href="/tags/%E6%97%A0%E7%BA%BF%E7%94%B5/" style="color: #00bcd4">
+                    无线电
                 </a>
             </span>
             
@@ -194,21 +194,84 @@
     </div>
     
     <div class="content" v-pre>
-        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+        <p>dolphin attack是一种超声波攻击，它通过注入人耳无法识别的 20kHz+ 超声波控制语音助手（如 Alexa、Siri），间接实现语音触发与信息获取。</p>
 <span id="more"></span>
 
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><pre><code class="bash">hexo new &quot;My New Post&quot;
+<p>参考<a target="_blank" rel="noopener" href="https://cool-y.github.io/2021/01/08/dolphin-attack-practice/">https://cool-y.github.io/2021/01/08/dolphin-attack-practice/</a></p>
+<p>学习一下如何对该攻击方法进行复现。该同学与作者进行了一番交流，一些问题总结如下。</p>
+<ul>
+<li>Q: 使用便携式设备攻击的时候，三星Galaxy S6 Edge发送的高频声音信号是怎么生成的呢？是预先使用专业设备调制好的信号保存为mp3吗？</li>
+<li>A: 通过软件调制，生成.wav的超声波音频文件，再通过三星手机播放的。</li>
+<li>Q: 用的是什么软件进行调制?</li>
+<li>A: 用过matlab和python，都是可以的</li>
+</ul>
+<h1 id="一、语音命令生成"><a href="#一、语音命令生成" class="headerlink" title="一、语音命令生成"></a>一、语音命令生成</h1><p><a target="_blank" rel="noopener" href="https://ttstool.com/">https://ttstool.com/</a> 微软的TTS接口生成的是mp3格式音频，一般来说我们使用python处理音频都是针对wav格式。 <a target="_blank" rel="noopener" href="https://www.aconvert.com/cn/audio/mp3-to-wav/">https://www.aconvert.com/cn/audio/mp3-to-wav/</a> 我们可以通过这个网站对格式做转换。 <a target="_blank" rel="noopener" href="https://coolyim.quip.com/-/blob/OVVAAAmjZcr/Eq9qXdQ7_eD5KQaR33wCCw?name=xiaoyi.wav">xiaoyi.wav</a> 这个网站的采样率最高只能达到96000hz <a target="_blank" rel="noopener" href="https://coolyim.quip.com/-/blob/OVVAAAmjZcr/aZfltfEV_ZxV1LCGznB1OA?name=6wxmu-crusr.wav">6wxmu-crusr.wav</a></p>
+<p>由于华为手机直接录制音频是m4a，所以还要准备一个m4a转wav的网站。</p>
+<p><a target="_blank" rel="noopener" href="https://cdkm.com/cn/m4a-to-wav#google_vignette">https://cdkm.com/cn/m4a-to-wav#google_vignette</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.freeconvert.com/zh/m4a-to-wav">https://www.freeconvert.com/zh/m4a-to-wav</a></p>
+<h1 id="二、语音命令调制"><a href="#二、语音命令调制" class="headerlink" title="二、语音命令调制"></a>二、语音命令调制</h1><p>生成语音命令的基带信号后，我们需要在超声载波上对其进行调制，以使它们听不到。 为了利用麦克风的非线性，DolphinAttack必须利用幅度调制（AM）。</p>
+<p><strong>AM调制</strong></p>
+<p>使载波的振幅按照所需传送信号的变化规律而变化，但频率保持不变的调制方法。调幅在有线电或无线电通信和广播中应用甚广。调幅是高频载波的振幅随信号改变的调制（AM）。其中，载波信号的振幅随着调制信号的某种特征的变换而变化。例如，0或1分别对应于无载波或有载波输出，电视的图像信号使用调幅。调频的抗干扰能力强，失真小，但服务半径小。</p>
+<p>假设载波uc(t)和调制信号的频率分别为ωc和Ω，在已调波中包含三个频率成分：ωc、ωc+Ω和ωc-Ω。ωc+Ω称为上边频，ωc-Ω称为下边频。</p>
+<p>使用python来进行调制即可。</p>
+<p>wave包最多能读取的wav音频采样率为<a target="_blank" rel="noopener" href="https://github.com/jiaaro/pydub/issues/134">48khz</a>，当超过这个值时，wave就不再支持（wave.Error: unknown format: 65534）。如果载波频率为30khz左右，这就要求音频文件的采样率高于60khz才能保证不失真。所幸<code>scipy.io.wavfile</code>支持高于48khz的wav文件读取。 使用以下Python程序来生成调制的AM和AM-SC音频，AM是广播无线电调制的“正常”声音，它加上了载波；AM-SC则只是载波与原始信号的乘积。</p>
+<pre><code class="Python"># coding=utf-8
+import numpy as np
+import matplotlib.pyplot as plt
+import os
+import wave
+import struct
+import math
+from pydub import AudioSegment
+import scipy.io.wavfile
+
+def main():
+    test = scipy.io.wavfile.read(&quot;xiaoyi.wav&quot;)
+    nframes = len(test[1])
+    waveData = np.fromstring(test[1],dtype=np.short)#将原始字符数据转换为整数
+    #音频数据归一化
+    maxW = max(abs(waveData))
+    waveData = waveData * 1.0/maxW
+    #将音频信号规整乘每行一路通道信号的格式，即该矩阵一行为一个通道的采样点，共nchannels行
+    Tdata = np.reshape(waveData,[nframes,1]).T # .T 表示转置
+    am = wave.open(&quot;am.wav&quot;, &quot;w&quot;)
+    amsc = wave.open(&quot;amsc.wav&quot;, &quot;w&quot;)
+    carrier = wave.open(&quot;carrier3000.wav&quot;, &quot;w&quot;)
+    for f in [am,amsc,carrier]:
+        f.setnchannels(1)
+        f.setsampwidth(2)
+        f.setframerate(96000)
+    for n in range(0, nframes):
+        carrier_sample = math.cos(30000.0 * (n / 96000.0) * math.pi * 2)
+        signal_am = signal_amsc= waveData[n] * carrier_sample
+        signal_am += carrier_sample
+        signal_am /= 2
+        am.writeframes(struct.pack(&#39;h&#39;, signal_am * maxW))
+        amsc.writeframes(struct.pack(&#39;h&#39;, signal_amsc * maxW))
+        carrier.writeframes(struct.pack(&#39;h&#39;, carrier_sample * maxW))
+
+
+if __name__==&#39;__main__&#39;:
+    main()
 </code></pre>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><pre><code class="bash">hexo server
+<h1 id="三、UltraDolphin"><a href="#三、UltraDolphin" class="headerlink" title="三、UltraDolphin"></a>三、UltraDolphin</h1><p>针对dolphin attack的延申，发现了一个新项目，能够针对性地完成音频处理，将音频调制到超声波。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/scs-labrat/UltraDolphin">https://github.com/scs-labrat/UltraDolphin</a></p>
+<p>使用方法</p>
+<pre><code class="C">git clone https://github.com/yourusername/UltraDolphin.git
+cd UltraDolphin
+python -m venv venv
+source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+pip install -r requirements.txt
+python ultradolphin.py
 </code></pre>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><pre><code class="bash">hexo generate
-</code></pre>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><pre><code class="bash">hexo deploy
-</code></pre>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+<p>出现提示时输入音频文件的路径：</p>
+<p>Enter the path to the audio file: path&#x2F;to&#x2F;your&#x2F;audiofile.wav</p>
+<p>该脚本将处理音频并生成以下文件：</p>
+<ul>
+<li><code>audible_artifacts.wav</code>：包含从超声波信号中提取的可听见的伪影。</li>
+<li><code>modulated_25kHz_signal.wav</code>：包含已调制的超声波信号。</li>
+</ul>
+<p>该脚本还将绘制信号处理各个阶段的频谱。</p>
 
     </div>
     
